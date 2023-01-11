@@ -1,14 +1,24 @@
 version: "3"
 
 services:
+  web:
+    container_name: "web"
+    build: nginx
+    ports:
+      - "8081:80"
+    volumes:
+      - ./app/conf.d:/etc/nginx/conf.d
+    networks:
+      - network
+    depends_on:
+      - app
+
   app:
     container_name: "app"
     image: app
     environment:
       - MONGODB_URL=mongodb://mongo_db/database
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     ports:
       - "8000:8000"
     networks:
